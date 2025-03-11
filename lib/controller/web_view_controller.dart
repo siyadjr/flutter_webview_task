@@ -9,7 +9,7 @@ class WebViewControllerX extends GetxController {
     super.onInit();
     webViewController = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..loadRequest(Uri.parse("https://flutter.dev/showcase")); // Load YouTube
+      ..loadRequest(Uri.parse("https://flutter.dev/showcase")); 
   }
 
   void reloadWebView() {

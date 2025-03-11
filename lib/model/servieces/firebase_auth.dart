@@ -1,38 +1,57 @@
 import 'dart:async';
 import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_task/model/country_model.dart';
+import 'package:flutter_task/view/authentication/otp_page.dart';
 
 class FirebaseAuthService {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  Future<void> initializeFirebase() async {
-    await Firebase.initializeApp();
-  }
 
-  Future<void> sendOtp(String phone) async {
-    try {
-      log('reached');
-      await initializeFirebase(); // Ensure Firebase is initialized
-      await _auth.verifyPhoneNumber(
-        phoneNumber: phone,
-        verificationCompleted: (PhoneAuthCredential credential) async {
-          await _auth.signInWithCredential(credential);
-          log("Phone number automatically verified and user signed in: $credential");
-        },
-        verificationFailed: (FirebaseAuthException e) {
-          log("Verification failed: ${e.message}");
-        },
-        codeSent: (String verificationId, int? resendToken) {
-          log("OTP sent to $phone. Verification ID: $verificationId");
-          // Store verificationId for later use if needed
-        },
-        codeAutoRetrievalTimeout: (String verificationId) {
-          log("Auto retrieval timeout. Verification ID: $verificationId");
-        },
+  Future<void> sendOtp(BuildContext context,String phoneNumber,Country country) async {
+    if (phoneNumber.length != 10) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('Please enter a valid 10-digit phone number'),
+            backgroundColor: Colors.red),
       );
-    } catch (e) {
-      log("Error in sendOtp: $e");
+      return;
     }
+    // _showOtpSheet(context);
+
+    String fullPhoneNumber =
+        '${country.dialCode}${phoneNumber}';
+    log('Sending OTP to: $fullPhoneNumber');
+
+    await FirebaseAuth.instance.verifyPhoneNumber(
+      phoneNumber: fullPhoneNumber,
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        await FirebaseAuth.instance.signInWithCredential(credential);
+      },
+      verificationFailed: (FirebaseAuthException e) {
+        log('Verification failed: ${e.message}');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content:
+                  Text('Verification failed: ${e.message ?? 'Unknown error'}'),
+              backgroundColor: Colors.red),
+        );
+      },
+      codeSent: (String verificationId, int? resendToken) {
+        log('Code sent: $verificationId');
+      
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (ctx) => OtpVerificationPage(
+                    selectedCountry: country,
+                    phoneNumber: phoneNumber,
+                    verificationId: verificationId)));
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {
+        log('Auto retrieval timeout: $verificationId');
+       
+      },
+    );
   }
 }
