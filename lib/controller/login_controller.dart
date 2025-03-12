@@ -85,19 +85,26 @@ class LoginController extends GetxController {
   late var selectedCountry = countries[45].obs;
   TextEditingController phoneController = TextEditingController();
 
-  final ValueNotifier<bool> isloading = ValueNotifier<bool>(false);
+  // Make isLoading reactive with .obs
+  RxBool isLoading = false.obs;
+
   Future<void> sendOtp(BuildContext context) async {
     try {
+      // Use value to update the observable
+      isLoading.value = true;
+
       await FirebaseAuthService()
           .sendOtp(context, phoneController.text, selectedCountry.value);
-      // Handle success here if needed
-    } catch (e) {
-      // Handle error here if needed
-      print('Error sending OTP: $e');
-    }
-  }
 
-  void dispose() {
-    isloading.dispose();
+      // Update the value after completion
+      // isLoading.value = false;
+      Future.delayed(Duration(seconds: 3), () {
+        isLoading.value = false;
+      });
+    } catch (e) {
+      // Handle error and reset loading state
+      print('Error sending OTP: $e');
+      isLoading.value = false;
+    }
   }
 }

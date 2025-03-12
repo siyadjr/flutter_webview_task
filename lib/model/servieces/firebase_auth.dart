@@ -6,9 +6,8 @@ import 'package:flutter_task/model/country_model.dart';
 import 'package:flutter_task/view/authentication/otp_page.dart';
 
 class FirebaseAuthService {
-
-
-  Future<void> sendOtp(BuildContext context,String phoneNumber,Country country) async {
+  Future<void> sendOtp(
+      BuildContext context, String phoneNumber, Country country) async {
     if (phoneNumber.length != 10) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -19,8 +18,7 @@ class FirebaseAuthService {
     }
     // _showOtpSheet(context);
 
-    String fullPhoneNumber =
-        '${country.dialCode}${phoneNumber}';
+    String fullPhoneNumber = '${country.dialCode}${phoneNumber}';
     log('Sending OTP to: $fullPhoneNumber');
 
     await FirebaseAuth.instance.verifyPhoneNumber(
@@ -39,18 +37,17 @@ class FirebaseAuthService {
       },
       codeSent: (String verificationId, int? resendToken) {
         log('Code sent: $verificationId');
-      
+
         Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (ctx) => OtpVerificationPage(
-                    selectedCountry: country,
+                    // selectedCountry: country,
                     phoneNumber: phoneNumber,
                     verificationId: verificationId)));
       },
       codeAutoRetrievalTimeout: (String verificationId) {
         log('Auto retrieval timeout: $verificationId');
-       
       },
     );
   }
