@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_task/controller/login_controller.dart';
 import 'package:flutter_task/core/theme/app_colours.dart';
+import 'package:flutter_task/view/authentication/widgets/otp_verification_button.dart';
+import 'package:flutter_task/view/authentication/widgets/otp_verification_button_container.dart';
 import 'package:get/get.dart';
 import '../../controller/otp_controller.dart';
 
@@ -42,35 +43,9 @@ class OtpVerificationPage extends StatelessWidget {
                     style: TextStyle(
                         fontSize: 16, color: AppColours().titleColour)),
                 const SizedBox(height: 40),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: List.generate(
-                      6, (index) => _buildOtpField(index, controller)),
-                ),
+                OtpVerificationButtonContainer(controller: controller),
                 const SizedBox(height: 32),
-                Obx(() => SizedBox(
-                      width: double.infinity,
-                      height: 55,
-                      child: ElevatedButton(
-                        onPressed: controller.isVerifying.value
-                            ? null
-                            : controller.verifyOtp,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.black,
-                          disabledBackgroundColor: Colors.grey,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12)),
-                        ),
-                        child: controller.isVerifying.value
-                            ? const CircularProgressIndicator(
-                                color: Colors.white, strokeWidth: 3)
-                            : const Text("Verify & Continue",
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold)),
-                      ),
-                    )),
+                OtpVerificationButton(controller: controller),
                 const SizedBox(height: 24),
                 TextButton(
                   onPressed: () {
@@ -92,41 +67,5 @@ class OtpVerificationPage extends StatelessWidget {
       ),
     );
   }
-
-  Widget _buildOtpField(int index, OtpController controller) {
-    return Container(
-      width: 48,
-      height: 56,
-      decoration: BoxDecoration(
-        color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-            color: controller.focusNodes[index].hasFocus
-                ? Colors.black
-                : Colors.transparent,
-            width: 1.5),
-      ),
-      child: TextField(
-        controller: controller.otpControllers[index],
-        focusNode: controller.focusNodes[index],
-        textAlign: TextAlign.center,
-        keyboardType: TextInputType.number,
-        maxLength: 1,
-        decoration: const InputDecoration(
-            counterText: '',
-            border: InputBorder.none,
-            contentPadding: EdgeInsets.zero),
-        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        onChanged: (value) {
-          if (value.isNotEmpty && index < 5) {
-            controller.focusNodes[index + 1].requestFocus();
-          }
-          if (index == 5 && value.isNotEmpty) {
-            controller.verifyOtp();
-          }
-        },
-      ),
-    );
-  }
 }
+

@@ -17,7 +17,7 @@ class OtpController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    Future.delayed(Duration(milliseconds: 500), () {
+    Future.delayed(const Duration(milliseconds: 500), () {
       focusNodes[0].requestFocus();
     });
   }
