@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_task/controller/otp_controller.dart';
+import 'package:flutter_task/core/theme/app_colours.dart';
 
 class OtpTextField extends StatelessWidget {
   const OtpTextField({
@@ -22,7 +23,7 @@ class OtpTextField extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
             color: controller.focusNodes[index].hasFocus
-                ? Colors.black
+                ? AppColours().buttonBackground
                 : Colors.transparent,
             width: 1.5),
       ),

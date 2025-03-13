@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_task/controller/login_controller.dart';
-import 'package:flutter_task/model/country_model.dart';
+import 'package:flutter_task/model/models/country_model.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 
 class DropDownButton extends StatelessWidget {

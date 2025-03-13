@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_task/core/theme/app_colours.dart';
+import 'package:flutter_task/main.dart';
 import 'package:flutter_task/view/authentication/screen_login.dart';
+import 'package:flutter_task/view/home/screen_home.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -12,10 +17,7 @@ class SplashScreen extends StatelessWidget {
     // Set up navigation after delay
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Future.delayed(const Duration(seconds: 3), () {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (ctx) => ScreenLogin()),
-        );
+        checkLogged(context);
       });
     });
 
@@ -31,12 +33,11 @@ class SplashScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Replace this with your app logo
                   Container(
                     width: 120,
                     height: 120,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColours().titleColour,
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
@@ -56,7 +57,7 @@ class SplashScreen extends StatelessWidget {
                   Text(
                     'Welcome Back',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: AppColours().titleColour,
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 1.2,
@@ -66,7 +67,7 @@ class SplashScreen extends StatelessWidget {
                   Text(
                     'Your Flutter journey continues here',
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.8),
+                      color: AppColours().titleColour.withOpacity(0.8),
                       fontSize: 16,
                     ),
                   ),
@@ -75,7 +76,8 @@ class SplashScreen extends StatelessWidget {
                     width: 40,
                     height: 40,
                     child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                          AppColours().titleColour),
                       strokeWidth: 3,
                     ),
                   ),
@@ -86,5 +88,24 @@ class SplashScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> checkLogged(BuildContext context) async {
+    final sharedPref = await SharedPreferences.getInstance();
+    final logged = sharedPref.getBool(isLogged) ?? false;
+
+    if (!context.mounted) return; // Prevents calling setState after widget disposal
+
+    if (logged) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (ctx) => const ScreenHome()),
+      );
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (ctx) => ScreenLogin()),
+      );
+    }
   }
 }

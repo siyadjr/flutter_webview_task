@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_task/model/country_model.dart';
+import 'package:flutter_task/model/models/country_model.dart';
 import 'package:flutter_task/view/authentication/otp_page.dart';
 
 class FirebaseAuthService {

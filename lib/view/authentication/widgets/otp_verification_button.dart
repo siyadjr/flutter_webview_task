@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_task/controller/otp_controller.dart';
+import 'package:flutter_task/core/theme/app_colours.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 
 class OtpVerificationButton extends StatelessWidget {
@@ -20,14 +21,14 @@ class OtpVerificationButton extends StatelessWidget {
                 ? null
                 : controller.verifyOtp,
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.black,
+              backgroundColor: AppColours().buttonBackground,
               disabledBackgroundColor: Colors.grey,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
             ),
             child: controller.isVerifying.value
-                ? const CircularProgressIndicator(
-                    color: Colors.white, strokeWidth: 3)
+                ?  CircularProgressIndicator(
+                    color: AppColours().titleColour, strokeWidth: 3)
                 : const Text("Verify & Continue",
                     style: TextStyle(
                         fontSize: 16,

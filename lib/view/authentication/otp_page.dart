@@ -53,7 +53,7 @@ class OtpVerificationPage extends StatelessWidget {
                       context,
                     );
                     Get.snackbar("Success", "OTP resent successfully",
-                        backgroundColor: Colors.green, colorText: Colors.white);
+                        backgroundColor:AppColours().succesColour, colorText:AppColours().titleColour);
                   },
                   child: Text("Didn't receive code? Resend",
                       style: TextStyle(

@@ -1,5 +1,7 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_task/model/country_model.dart';
+import 'package:flutter_task/model/models/country_model.dart';
 import 'package:flutter_task/model/servieces/firebase_auth.dart';
 import 'package:get/get.dart';
 
@@ -98,7 +100,7 @@ class LoginController extends GetxController {
 
       // Update the value after completion
       // isLoading.value = false;
-      Future.delayed(Duration(seconds: 3), () {
+      Future.delayed(const Duration(seconds: 3), () {
         isLoading.value = false;
       });
     } catch (e) {
@@ -106,5 +108,13 @@ class LoginController extends GetxController {
       print('Error sending OTP: $e');
       isLoading.value = false;
     }
+  }
+
+  @override
+  void onClose() {
+    log('called login controller');
+    phoneController.dispose(); // Dispose the controller
+    isLoading.value = false; // Reset loading state
+    super.onClose();
   }
 }

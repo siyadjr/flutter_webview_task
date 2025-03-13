@@ -1,10 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_task/firebase_options.dart';
-
 import 'package:flutter_task/view/authentication/splash_screen.dart';
 import 'package:get/get.dart';
 
+
+const isLogged='isLogged';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
